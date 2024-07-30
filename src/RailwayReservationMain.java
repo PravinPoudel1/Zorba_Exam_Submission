@@ -27,7 +27,8 @@ public class RailwayReservationMain {
           String sql = "INSERT INTO railway_reservation (passenger_name, passenger_age, chosen_seat, reservation_type, is_senior_citizen, amount_paid) VALUES (?, ?, ?, ?, ?, ?)";
           try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
-              Reservation reservation = new Reservation("Sanju Sharma", 30, "A1", "First Class", false, 100.0);
+              Reservation reservation = new Reservation( 30, """
+                      A1""", "First Class", false, 100.0);
 
               pstmt.setString(1, reservation.getPassengerName());
               pstmt.setInt(2, reservation.getPassengerAge());

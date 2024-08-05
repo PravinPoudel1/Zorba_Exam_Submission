@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Teacher" table="Teacher">
+        <id name="teacherId" column="teacher_id">
+            <generator class="increment"/>
+        </id>
+        <property name="studName" column="stud_name"/>
+        <property name="studRollNumber" column="stud_roll_number"/>
+        <many-to-one name="subject" class="Subject" column="subject_id" not-null="true"/>
+    </class>
+</hibernate-mapping>

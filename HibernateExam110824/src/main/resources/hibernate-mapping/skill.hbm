@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<class name="org.example.xml_based.entity.Skill" table="skill">
+<id name="skillId" column="skill_Id">
+<generator class="increment"/>
+</id>
+<property name="skillName" column="skill_name"/>
+<set name="employees" table="emp_skill_mapping" lazy="true" cascade="all">
+<key>
+<column name="skill_Id" not-null="true"/>
+</key>
+<many-to-many entity-name="org.example.xml_based.entity.Employee">
+<column name="emp_Id" not-null="true"/>
+</many-to-many>
+</set>
+</class>
+</hibernate-mapping>

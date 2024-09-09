@@ -11,6 +11,10 @@
     <title>$Title$</title>
   </head>
   <body>
-  $END$
+  <center> <h1> SUCCESS!!! </h1>
+
+    <a href = "http://localhost:8080/SpringWebMVCExamFirst/user/getUserData"> Click here for the list! </a>
+  </center>
+
   </body>
 </html>

@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
-             xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:tx="http://www.springframework.org/schema/tx"
              xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+                                 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                                 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                                 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
-    <!-- Help us to enable @Controller annotation across the application -->
+    <!-- Enable @Controller annotation across the application -->
     <annotation-driven/>
 
-    <!-- This helps to scan the entire package and find out the related controller from it -->
+    <!-- Scan for components including entities, controllers, and services -->
     <context:component-scan base-package="com.springmvcexam"/>
 
-    <!--Helps to identify/locate the view (JSP/HTML)-->
+    <!-- View Resolver for JSP -->
     <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <beans:property name="prefix" value="/WEB-INF/views"/>
+        <beans:property name="prefix" value="/WEB-INF/views/"/>
         <beans:property name="suffix" value=".jsp"/>
     </beans:bean>
 
-    <!--Database Configuration : mysql-->
-    <beans:bean name="datasource" class="org.apache.commons.dbcp.BasicDataSource">
+    <!-- Database Configuration -->
+    <beans:bean id="datasource" class="org.apache.commons.dbcp.BasicDataSource">
         <beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
         <beans:property name="url" value="jdbc:mysql://localhost:3306/spring_exam"/>
         <beans:property name="username" value="root"/>
         <beans:property name="password" value="Cypress@123"/>
     </beans:bean>
-    <beans:bean name="hibernateSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+
+    <!-- Hibernate Session Factory -->
+    <beans:bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <beans:property name="dataSource" ref="datasource"/>
         <beans:property name="hibernateProperties">
             <beans:props>
@@ -39,19 +43,21 @@
         <beans:property name="annotatedClasses">
             <beans:list>
                 <beans:value>com.springmvcexam.entity.User</beans:value>
-<!--                <beans:value>com.springmvcexam.entity.Role</beans:value>-->
+                <beans:value>com.springmvcexam.entity.Role</beans:value>
             </beans:list>
         </beans:property>
     </beans:bean>
-      <beans:bean name="userDao" class="com.springmvcexam.dao.UserDaoImplement">
-          <beans:constructor-arg name="sessionFactory" ref="hibernateSessionFactory"/>
-      </beans:bean>
-    <!-- Configure Spring Transaction manager -->
-    <beans:bean name="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+
+    <!-- DAO Bean Configuration -->
+    <beans:bean id="userDao" class="com.springmvcexam.dao.UserDaoImplement">
+        <beans:constructor-arg name="sessionFactory" ref="hibernateSessionFactory"/>
+    </beans:bean>
+
+    <!-- Transaction Manager -->
+    <beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <beans:property name="sessionFactory" ref="hibernateSessionFactory"/>
     </beans:bean>
-    <!-- Enable @Transactional to handle all the operation like commit and rollback -->
+
+    <!-- Enable @Transactional -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
-
-
 </beans:beans>

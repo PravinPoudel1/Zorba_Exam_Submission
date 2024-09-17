@@ -1,41 +1,34 @@
 package com.springmvcexam.entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
-import javax.persistence.ManyToMany;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.util.Set;
 
+@Data
 @Entity
-@Table(name = "userInfo")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "user_info")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @Column(name = "user_id")
+    private Integer userId;
+    @Column(name = "user_fullname", length = 255)
+    private String userFullName;
+    @Column(name = "user_email", length = 50)
+    private String userEmail;
+    @Column(name = "user_mobile", length = 10)
+    private Long userMobile;
+    @Column(name = "user_name", length = 30)
+    private String username;
+    @Column(name = "user_pass", length = 30)
+    private String userPass;
 
-    private String name;
-    private String email;
-    private Long mobile;
-    private String userName;
-    private String password;
-
-    @ManyToMany
-    @JoinTable(name = "user_roles",
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roleSet;
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    Set<Role> roles;
 }
-

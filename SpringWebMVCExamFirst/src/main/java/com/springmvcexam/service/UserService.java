@@ -1,97 +1,85 @@
 package com.springmvcexam.service;
-import com.springmvcexam.Model.UserModel;
-import com.springmvcexam.dao.UserDao;
+
+
+import com.springmvcexam.dao.UserDAO;
+import com.springmvcexam.entity.Role;
 import com.springmvcexam.entity.User;
+import com.springmvcexam.exception.InvalidEmailException;
+import com.springmvcexam.exception.InvalidMobileNumber;
+import com.springmvcexam.exception.InvalidPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
 
     @Autowired
-    private UserDao userDao;
+    UserDAO userDAO;
 
-    @Transactional
-    public String saveUserData(UserModel userModel) {
-        /*if (userModel.getUserEmail() != null && userModel.getUserName() != null && userModel.getUserMobile() != null && userModel.getUserPassword() != null) {
-            User user = new User();
-            user.setName(userModel.getName());
-            user.setUserEmail(userModel.getUserEmail());
-            user.setUserMobile(userModel.getUserMobile());
-            user.setUserName(userModel.getUserName());
-            user.setUserPassword(userModel.getUserPassword());
-            return userDao.saveUser(user);
+    public boolean saveUser(User user) {
+        if (!user.getUserEmail().contains("@")) {
+            throw new InvalidEmailException("Email is incorrect");
+        } else if (!(user.getUserMobile().toString().length()==10)) {
+            throw new InvalidMobileNumber("Mobile number is invalid");
+        } else if (!(user.getUserPass().length()>=10)) {
+            throw new InvalidPassword("Password needs to be at least 10 characters");
         }
-        return "Incomplete data. Please provide all required fields.";*/
-        if (userModel.getEmail() != null && userModel.getUserName() != null && userModel.getMobile() != null && userModel.getPassword() != null) {
-            User user = new User();
-            user.setName(userModel.getUserName());
-            user.setEmail(userModel.getEmail());
-            user.setMobile(userModel.getMobile());
-            user.setUserName(userModel.getUserName());
-            user.setPassword(userModel.getPassword());
-            userDao.saveUser(user);
-        }
-        return "Incomplete data. Please provide all required fields.";
+        return this.userDAO.saveUser(user);
     }
 
-    public List<UserModel> getAllUsers() {
-        List<User> users = userDao.getAllUsers();
-        List<UserModel> userModels = new ArrayList<>();
-        for (User user : users) {
-            UserModel userModel = new UserModel();
-            userModel.setUserId(user.getUserId());
-            userModel.setName(user.getName());
-            userModel.setUserEmail(user.getUserEmail());
-            userModel.setUserMobile(user.getUserMobile());
-            userModel.setUserName(user.getUserName());
-            userModel.setUserPassword(user.getUserPassword());
-            userModels.add(userModel);
+    public boolean updateUser(Integer userId,String roleName) {
+        User user = this.userDAO.getUser(userId);
+        if (user != null && !roleName.isEmpty()) {
+            Role role = userDAO.getRole(roleName);
+            if (role != null) {
+                user.getRoles().add(role);
+            } else {
+                Role newRole = new Role();
+                newRole.setRoleName(roleName);
+                user.getRoles().add(newRole);
+            }
+
+
+            return this.userDAO.updateUser(user);
         }
-        return userModels;
+        return false;
     }
 
-    public UserModel getUserById(Integer userId) {
-        if (userId == null) {
-            return new UserModel();
+    public User getUser(Integer id) {
+        if (id == 0) {
+            return null;
         }
-        User user = userDao.getUserById(userId);
-        if (user == null) {
-            return new UserModel();
-        }
-        UserModel userModel = new UserModel();
-        userModel.setUserId(user.getUserId());
-        userModel.setName(user.getName());
-        userModel.setUserEmail(user.getUserEmail());
-        userModel.setUserMobile(user.getUserMobile());
-        userModel.setUserName(user.getUserName());
-        userModel.setUserPassword(user.getUserPassword());
-        return userModel;
+        return this.userDAO.getUser(id);
     }
 
-    public UserModel findUserByUsername(String username) {
-
-        User user = userDao.findByUsername(username);
+    public User getUser(String userName, String password, String roleName) {
+        User user = this.userDAO.getUser(userName, password);
         if (user != null) {
-            UserModel userModel = new UserModel();
-            userModel.setUserId(user.getUserId());
-            userModel.setName(user.getName());
-            userModel.setUserEmail(user.getUserEmail());
-            userModel.setUserMobile(user.getUserMobile());
-            userModel.setUserName(user.getUserName());
-            userModel.setUserPassword(user.getUserPassword());
-            return userModel;
+            Set<Role> roles = user.getRoles();
+            for (Role role : roles) {
+                if (role.getRoleName().equalsIgnoreCase(roleName)) {
+                    return user;
+                }
+            }
         }
         return null;
     }
 
-    public boolean validateUser(String username, String password, String role) {
-        UserModel user = findUserByUsername(username);
-        return user != null && user.getUserPassword().equals(password) && user.getRole().equals(role);
+    public List<Role> getAllRoles() {
+        return this.userDAO.getAllRoles();
     }
+
+    public List<User> getAllUsers() {
+        return this.userDAO.getAllUsers();
+    }
+
+    public User removeRole(Integer userId, Integer roleId) {
+        return this.userDAO.removeRole(userId, roleId);
+
+    }
+
 
 }

@@ -1,36 +1,30 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: poude
-  Date: 9/8/2024
-  Time: 6:40 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>vendorLogin</title>
-</head>
-<body>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+ <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+ <html>
+ <head>
+     <title>Vendor Login</title>
+ </head>
+ <body>
+ <form action="vendorLoginController" method="post">
 
-<h2>Vendor Login</h2>
-<%--@elvariable id="vendor" type="com.springmvcexam"--%>
-<form:form modelAttribute="vendor" action="login" method="post">
-    <form:label path="username">Username: </form:label>
-    <form:input path="username"/><br>
+   <label for="username">Username:</label>
+   <input type="text"  id="username" name="username" required><br><br>
 
-    <form:label path="password">Password: </form:label>
-    <form:password path="password"/><br>
+   <label for="password">Password:</label>
+   <input type="password" id="password" name="password" required><br><br>
 
-    <form:label path="role">Role: </form:label>
-    <form:input path="role" value="Vendor" readonly="true"/><br>
+   <label for="role">Role:</label>
+   <input type="text" id="role" name="roleName" value="Vendor" readonly><br><br>
 
-    <input type="submit" value="Login"/>
-</form:form>
+   <input type="submit" value="Submit">
+ </form>
 
-<c:if test="${not empty error}">
-    <p style="color:red">${error}</p>
-</c:if>
+ <c:if test="${not empty errorMessage}">
+   <p style="color: red;">"${errorMessage}</p>
+ </c:if>
 
-</body>
-</html>
+
+ <p>Don't have an account? <a href="user/registerUser">Register here</a></p>
+
+ </body>
+ </html>

@@ -50,7 +50,7 @@
 
     <!-- DAO Bean Configuration -->
     <beans:bean id="userDao" class="com.springmvcexam.dao.UserDaoImplement">
-        <beans:constructor-arg name="sessionFactory" ref="hibernateSessionFactory"/>
+        <beans:constructor-arg ref="hibernateSessionFactory"/>
     </beans:bean>
 
     <!-- Transaction Manager -->

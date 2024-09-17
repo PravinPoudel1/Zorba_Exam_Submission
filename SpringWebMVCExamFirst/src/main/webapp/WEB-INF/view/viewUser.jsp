@@ -1,50 +1,46 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: poude
-  Date: 9/8/2024
-  Time: 2:58 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <html>
-  <head>
-    <title>List of Users</title>
-  </head>
-  <body>
+<head>
+    <title>Add Role</title>
+</head>
+<body>
 
-    <u><h2>List of Users</h2></u>
-    <table border = "1">
-      <head>
-        <tr>
-          <th>UserID</th>
-          <th>Name</th>
-          <th>UserEmail</th>
-          <th>UserMobile</th>
-          <th>UserName</th>
-          <th>UserPassword</th>
-        </tr>
-      </head>
-      <body>
-      <c:forEach var = "user" items = "${userModels}">
+<h2>Welcome, ${userObj.userFullName},</h2>
+<br>
+<table border="1">
+  <tr>
+    <th>Role ID</th>
+    <th>Role</th>
+    <th>Action</th>
+  </tr>
+  <c:forEach var="role" items="${userObj.roles}">
+    <tr>
+      <td>${role.roleId}</td>
+      <td>${role.roleName}</td>
+      <td>
+        <a href="${pageContext.request.contextPath}/user/removeRole/${role.roleId}/${userObj.userId}">Remove</a>
+      </td>
+    </tr>
+  </c:forEach>
+</table>
 
-      <tr>
-        <td>
-          <a href="http://localhost:8080/SpringMVCApplication/user/getUserById/${user.userId}">
-              <c:out value="${user.userId}"/>
-        </td>
-        </a>
-        <td><c:out value="${user.Name}"/></td>
-        <td><c:out value="${user.userEmail}"/></td>
-        <td><c:out value="${user.userMobile}"/></td>
-        <td><c:out value= "${user.userName}"/></td>
-        <td><c:out value="${user.userPassword}"/></td>
+<br><hr><br>
+<h3>Add Role</h3>
+<form action="${pageContext.request.contextPath}/user/updateUser" method="post">
+  <input type="hidden" name="userId" value="${userObj.userId}">
 
-      </tr>
+  <label for="role">Select Role:</label>
+  <select name = "role" id="role">
+    <option value="admin">Admin</option>
+    <option value="user">User</option>
+    <option value="vendor">Vendor</option>
+  </select>
 
-      </c:forEach>
+  <input type="submit" value="Submit"/>
+</form>
 
-  </body>
-  </table>
-  </body>
+</body>
 </html>

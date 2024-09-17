@@ -1,38 +1,22 @@
 package com.springmvcexam.entity;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
 
 
+import lombok.Data;
 
-
+import javax.persistence.*;
 
 @Entity
-@Table(name = "Roles")
+@Table( name = "role")
+@Data
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Column(name = "role_id", length = 10)
+    private Integer roleId;
+    @Column(name = "role_name", length = 40)
     private String roleName;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
+    private String role_Name= "Customer";
 
 }
